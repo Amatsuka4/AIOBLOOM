@@ -1,13 +1,18 @@
 import "dotenv/config";
-import { Client, Events, GatewayIntentBits } from "discord.js";
+import { Client, GatewayIntentBits } from "discord.js";
+import { events } from "./events/index.js";
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) throw new Error("DISCORD_TOKEN is not set in .env");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-client.once(Events.ClientReady, (c) => {
-  console.log(`Logged in as ${c.user.tag}`);
-});
+for (const event of events) {
+  if (event.once) {
+    client.once(event.name, event.execute);
+  } else {
+    client.on(event.name, event.execute);
+  }
+}
 
 client.login(token);
