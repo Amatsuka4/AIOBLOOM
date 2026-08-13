@@ -1,5 +1,7 @@
 import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
 import { getApiConfigByApiKey } from "../utils/utils.js";
+import { z } from "zod";
 
 type ChatMessage = { role: "system" | "user"; content: string };
 
@@ -25,6 +27,19 @@ class OpenAiRepository {
       messages,
     });
     return response.choices[0]?.message.content ?? "";
+  }
+
+  async createChatCompletionWithResponseFormat(
+    messages: ChatMessage[],
+    responseFormat: z.ZodSchema,
+    formatName: string,
+  ) {
+    const response = await this.#client.chat.completions.create({
+      model: this.#model,
+      messages,
+      response_format: zodResponseFormat(responseFormat, formatName),
+    });
+    return JSON.parse(response.choices[0]?.message.content ?? "{}");
   }
 }
 
