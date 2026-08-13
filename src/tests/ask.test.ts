@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { askOpenAI } from "./ask.js";
+import { askOpenAI } from "../services/ask.js";
 
 describe("askOpenAI", () => {
   it("モックしたrepositoryを注入して、実際のAPIを叩かずに検証できる", async () => {

@@ -27,7 +27,7 @@ describe("createChatCompletionWithResponseFormat", () => {
       choices: [{ message: { content: JSON.stringify({ answer: "42" }) } }],
     });
 
-    const { getOpenaiRepository } = await import("./openai.js");
+    const { getOpenaiRepository } = await import("../repositories/openai.js");
     const repo = getOpenaiRepository();
 
     const result = await repo.createChatCompletionWithResponseFormat(
